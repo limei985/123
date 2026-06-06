@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防诈知识测试问卷</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --danger: #d93025;
+            --success: #188038;
+            --warning: #e37400;
+            --bg: #f0f4f8;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --text-secondary: #5f6368;
+            --border: #dadce0;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a3c5e 0%, #1a5c8a 40%, #1a73b8 100%);
+            color: #fff;
+            padding: 28px 20px 24px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .header .icon-shield {
+            font-size: 42px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+        .header .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 16px 16px 40px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a3c5e;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8edf2;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .card-title .badge.judge {
+            background: #5c6bc0;
+        }
+        .card-title .badge.single {
+            background: #26a69a;
+        }
+        .card-title .badge.multi {
+            background: #ef6c00;
+        }
+        .card-title .badge.fill {
+            background: #7b1fa2;
+        }
+
+        /* Form groups */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group select,
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            background: #fafbfc;
+            font-family: inherit;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
+            background: #fff;
+        }
+
+        .required-mark {
+            color: #d93025;
+            font-weight: bold;
+        }
+
+        /* Question block */
+        .question-block {
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-radius: var(--radius-sm);
+            background: #fafbfc;
+            border-left: 4px solid transparent;
+            transition: var(--transition);
+            position: relative;
+        }
+        .question-block.judge-q {
+            border-left-color: #5c6bc0;
+        }
+        .question-block.single-q {
+            border-left-color: #26a69a;
+        }
+        .question-block.multi-q {
+            border-left-color: #ef6c00;
+        }
+        .question-block.fill-q {
+            border-left-color: #7b1fa2;
+        }
+        .question-block .q-num {
+            font-weight: 700;
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .question-block .q-text {
+            font-size: 0.9rem;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        .question-block .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 18px;
+        }
+        .question-block .options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: var(--transition);
+            background: #fff;
+            border: 1.5px solid #e0e0e0;
+            user-select: none;
+        }
+        .question-block .options label:hover {
+            background: #e8f0fe;
+            border-color: #a8c8f0;
+        }
+        .question-block .options label input {
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+        }
+        .question-block .options label:has(input:checked) {
+            background: #e3edfb;
+            border-color: var(--primary);
+            font-weight: 600;
+        }
+        .question-block.fill-q textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: vertical;
+            background: #fafbfc;
+            transition: var(--transition);
+        }
+        .question-block.fill-q textarea:focus {
+            outline: none;
+            border-color: #7b1fa2;
+            box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.08);
+            background: #fff;
+        }
+        .fill-ref {
+            background: #fef9e7;
+            border: 1px dashed #e0c36a;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: #5d4e37;
+            margin-bottom: 8px;
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .fill-ref .ref-label {
+            font-weight: 700;
+            color: #7b5e1b;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.78rem;
+        }
+
+        /* Submit button */
+        .submit-wrap {
+            text-align: center;
+            padding: 10px 0 30px;
+        }
+        .btn-submit {
+            display: inline-block;
+            padding: 14px 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #1a73e8, #1557b0);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(26, 115, 232, 0.35);
+            font-family: inherit;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(26, 115, 232, 0.45);
+            background: linear-gradient(135deg, #1d7ef0, #1665c4);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(26, 115, 232, 0.3);
+        }
+
+        /* Result panel */
+        .result-panel {
+            display: none;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 28px 22px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+            animation: fadeInUp 0.4s ease;
+        }
+        .result-panel.show {
+            display: block;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .result-score {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+        .result-score.excellent {
+            color: #188038;
+        }
+        .result-score.good {
+            color: #1a73e8;
+        }
+        .result-score.fair {
+            color: #e37400;
+        }
+        .result-score.pass {
+            color: #c26400;
+        }
+        .result-score.fail {
+            color: #d93025;
+        }
+        .result-grade {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .result-breakdown {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 18px;
+            font-size: 0.85rem;
+            color: #5f6368;
+        }
+        .result-breakdown span {
+            background: #f1f3f4;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-weight: 500;
+        }
+        .result-msg {
+            text-align: center;
+            font-size: 0.95rem;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+        .result-msg.excellent {
+            background: #e6f4ea;
+            color: #1e4620;
+        }
+        .result-msg.good {
+            background: #e8f0fe;
+            color: #1a3c5e;
+        }
+        .result-msg.fair {
+            background: #fef7e0;
+            color: #5d3a00;
+        }
+        .result-msg.fail {
+            background: #fce8e6;
+            color: #5c1a1a;
+        }
+
+        /* Detail toggle */
+        .detail-toggle {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #f5f7f9;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+            text-align: center;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .detail-toggle:hover {
+            background: #e8ecf1;
+        }
+        .detail-section {
+            display: none;
+            margin-top: 12px;
+        }
+        .detail-section.open {
+            display: block;
+        }
+        .detail-item {
+            padding: 8px 10px;
+            margin: 4px 0;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .detail-item.correct {
+            background: #e6f4ea;
+            border-left: 3px solid #188038;
+        }
+        .detail-item.wrong {
+            background: #fce8e6;
+            border-left: 3px solid #d93025;
+        }
+        .detail-item .icon-result {
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .detail-item .detail-text {
+            flex: 1;
+        }
+        .detail-item .detail-text .correct-ans {
+            color: #188038;
+            font-weight: 600;
+        }
+        .detail-item .detail-text .wrong-ans {
+            color: #d93025;
+            font-weight: 600;
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .scroll-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .card {
+                padding: 16px 12px;
+            }
+            .question-block {
+                padding: 10px 10px;
+            }
+            .question-block .options {
+                gap: 6px 10px;
+            }
+            .question-block .options label {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+            .result-score {
+                font-size: 2.8rem;
+            }
+            .btn-submit {
+                padding: 12px 36px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .header {
+                position: static;
+                background: #fff !important;
+                color: #000 !important;
+                box-shadow: none;
+                border-bottom: 2px solid #000;
+            }
+            .btn-submit,
+            .scroll-top,
+            .detail-toggle {
+                display: none !important;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            body {
+                background: #fff;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <span class="icon-shield">🛡️</span>
+        <h1>防诈知识测试问卷</h1>
+        <p class="subtitle">提高防范意识 · 远离电信诈骗 · 守护财产安全</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+
+        <!-- 结果面板（初始隐藏） -->
+        <div class="result-panel" id="resultPanel">
+            <div class="result-header">
+                <div class="result-score" id="resultScore">--</div>
+                <div class="result-grade" id="resultGrade"></div>
+            </div>
+            <div class="result-breakdown" id="resultBreakdown"></div>
+            <div class="result-msg" id="resultMsg"></div>
+            <button class="detail-toggle" id="detailToggle" onclick="toggleDetail()">
+                📋 查看详细答题解析 ▼
+            </button>
+            <div class="detail-section" id="detailSection"></div>
+        </div>
+
+        <!-- 表单 -->
+        <form id="quizForm" onsubmit="return false;">
+
+            <!-- 基本信息 -->
+            <div class="card">
+                <div class="card-title">📝 基本信息</div>
+                <div class="form-group">
+                    <label><span class="required-mark">*</span> 个人身份：</label>
+                    <select id="identity" required>
+                        <option value="">请选择</option>
+                        <option value="本科生">本科生</option>
+                        <option value="硕士研究生">硕士研究生</option>
+                        <option value="博士研究生">博士研究生</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><span class="required-mark">*</span> 所在年级：</label>
+                    <select id="grade" required>
+                        <option value="">请选择</option>
+                        <option value="大一">大一</option>
+                        <option value="大二">大二</option>
+                        <option value="大三">大三</option>
+                        <option value="大四">大四</option>
+                        <option value="研一">研一</option>
+                        <option value="研二">研二</option>
+                        <option value="研三">研三</option>
+                        <option value="博一">博一</option>
+                        <option value="博二">博二</option>
+                        <option value="博三">博三</option>
+                        <option value="博四及以上">博四及以上</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><span class="required-mark">*</span> 姓名：</label>
+                    <input type="text" id="studentName" placeholder="请输入姓名" required maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label><span class="required-mark">*</span> 学号：</label>
+                    <input type="text" id="studentId" placeholder="请输入学号（15字以内）" required maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label><span class="required-mark">*</span> 所在培养单位：</label>
+                    <select id="department" required>
+                        <option value="">请选择</option>
+                        <option value="计算机学院">计算机学院</option>
+                        <option value="电子信息工程学院">电子信息工程学院</option>
+                        <option value="机械工程学院">机械工程学院</option>
+                        <option value="经济管理学院">经济管理学院</option>
+                        <option value="理学院">理学院</option>
+                        <option value="文学院">文学院</option>
+                        <option value="法学院">法学院</option>
+                        <option value="医学院">医学院</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 一、判断题 -->
+            <div class="card">
+                <div class="card-title"><span class="badge judge">判断题</span> 一、判断题（15题，每题2分，共30分）</div>
+                <div id="judgeQuestions"></div>
+            </div>
+
+            <!-- 二、单项选择题 -->
+            <div class="card">
+                <div class="card-title"><span class="badge single">单选题</span> 二、单项选择题（15题，每题2分，共30分）</div>
+                <div id="singleQuestions"></div>
+            </div>
+
+            <!-- 三、多项选择题 -->
+            <div class="card">
+                <div class="card-title"><span class="badge multi">多选题</span> 三、多项选择题（少选、多选、错选均不得分，10题，每题3分，共30分）</div>
+                <div id="multiQuestions"></div>
+            </div>
+
+            <!-- 四、填空题 -->
+            <div class="card">
+                <div class="card-title"><span class="badge fill">填空题</span> 四、填空题（2题，每题5分，共10分）<br><small style="color:#7b1fa2;">请将以下文字完整、无误地进行抄录</small></div>
+                <div id="fillQuestions"></div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="submit-wrap">
+                <button class="btn-submit" onclick="submitQuiz()">✅ 提交答卷并查看成绩</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 回到顶部 -->
+    <button class="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+
+    <script>
+        // ==================== 题目数据 ====================
+        // 判断题：{id, text, answer: true=正确, false=错误}
+        const judgeQuestions = [
+            { id: 1,
+                text: '小陈发现网络兼职广告并下载APP后，看到"做任务领佣金"。因手头紧立刻按指引操作。',
+            answer: false },
+            { id: 2,
+                text: '朱同学接到自称公安局警官的电话，称其银行卡有盗刷风险，需登录"智能警务系统APP"填写银行卡信息，为了保住财产，他依言操作。',
+                answer: false },
+            { id: 3,
+                text: '小王计划去看演唱会，但并未成功抢到门票。心灰意冷的他在小红书看到一则工作人员转售余票的帖子，遂联系此人通过"内部工作人员"购买。',
+                answer: false },
+            { id: 4,
+                text: '小孙在闲鱼求购限量球鞋，代购以"平台手续费高"为由要求微信交易，小孙担心诈骗，故与代购商量先给其微信转部分定金，收到货后再付尾款。',
+            answer: false },
+            { id: 5,
+                text: '李同学接到一个电话，对方自称是学校财务处老师，说李同学有一笔奖学金没领，需要他提供银行卡号和密码。李同学立即拒绝，并拨打学校财务处官方电话反映。',
+                answer: true },
+            { id: 6,
+                text: '小李看到低价出售二手苹果手机的帖子，十分心动，于是添加卖家微信。卖家发送购买记录和实物照片并确定交易金额后，让小李通过微信转定金，并称可以等到小李收到货后，再补全剩下金额。小李认为机会难得，迅速转账以免手机卖给别人。',
+                answer: false },
+            { id: 7,
+                text: '小杨玩网络游戏时，看到游戏公屏上有人发布出售"全皮肤稀有账号"的消息，价格远低于市场价。小杨添加对方QQ好友后，对方发送了一个名为"某鱼官方担保平台"的链接，要求小杨在该网站上下单购买。小杨支付200元后，网站提示"资金冻结"，客服称需再充值500元"解冻费"才能提现和获得账号。为了要回200元并买到账号，小杨充值了500元。',
+                answer: false },
+            { id: 8,
+                text: '小鲁接到自称XX航空公司客服的电话，客服表示小鲁的航班取消，现需退票或改签，并会补贴300元以表达歉意，小鲁认为既然能够领到补贴，尽快按照客服的要求操作改签新航班。',
+                answer: false },
+            { id: 9,
+                text: '小美买连衣裙后，接到自称商家的电话，称"发错货需配合退款"，因对方能说出个人及订单信息，小美全程照做。',
+            answer: false },
+            { id: 10, text: '凡是要求你打开屏幕共享，指导你进行资金账户操作的，都是诈骗。', answer: true },
+            { id: 11,
+                text: '凌晨，小顾收到朋友QQ消息。对方发来已经给小顾转账5000元的支付截图，声称急需就医但微信限额，让小顾帮忙给指定银行账户转账5000元。小顾碍于情面，未进一步核实就给对方打款。',
+                answer: false },
+            { id: 12,
+                text: '"帮信行为"是指帮助信息网络犯罪活动的行为，即明知他人利用信息网络实施犯罪，仍为其提供技术支持或帮助的行为。',
+                answer: true },
+            { id: 13,
+                text: '任何出租、出借、出售电话卡、银行卡，或明知他人从事电信网络诈骗犯罪，仍积极拉人进群、拨打电话，提供银行卡提现、转账等行为均属违法犯罪。',
+                answer: true },
+            { id: 14, text: '网络招嫖是违法行为，不法分子常借此引流，衍生刷单、投资、裸聊敲诈等诈骗手段，最终目的是骗取钱财。',
+                answer: true },
+            { id: 15,
+                text: '正规网络商家退款无需事前支付费用，切勿随意打开屏幕共享功能，切勿轻易点击来源不明的网站链接，更不要随意填写银行卡密码、短信验证码等信息。',
+                answer: true },
+        ];
+
+        // 单选题：{id, text, options:['A.xxx','B.xxx',...], answer: 'A'/'B'/'C'/'D'}
+        const singleQuestions = [
+            { id: 16,
+                text: '小王计划去看演唱会，但官网已售罄。某天他看到一则"票足、低价卖回血"的广告并附有购买链接与联系方式，他该怎么做（）',
+                options: ['A.应该正规，下单购票', 'B.见其他网友分享过成功购买的经验，便火速下单', 'C.拨打电话咨询',
+                'D.这次演唱会为实名制购票，一定是诈骗！'], answer: 'D' },
+            { id: 17,
+                text: '唐同学接到自称是花呗客服的电话，对方称"按照中国人民银行最新要求，为防止大学生过度消费，将不再对大学生提供透支额度。若唐同学不提前还款，将冻结其银行卡并影响其征信。"唐同学应该怎么做（）',
+                options: ['A.恐慌之下，听从对方指示进行操作', 'B.害怕影响个人征信、被学校处分，主动了解处理办法',
+                    'C.立即挂断电话，通过官方渠道核实', 'D.为了归还透支金额，又从其他金融贷款平台借钱'
+                ], answer: 'C' },
+            { id: 18,
+                text: '小全在二手平台看到有人出售心仪已久的相机。进一步了解后，卖家发来购买记录和实物照片。由于金额超出预算，商家让小全通过微信转定金，等到小全收到货后，再用月初的生活费补全尾款。下列说法正确的是（）',
+                options: ['A.卖家有购买记录和实物照片，可信度高，按要求继续转定金',
+                    'B.卖家提出第三方平台交易，极有可能是诈骗，坚持在正规平台交易，若卖家不同意，则立即停止交易',
+                    'C.尝试与卖家协商，要求其提供证明信息再支付定金', 'D.机会难得，迅速根据卖家要求转账以免相机卖给别人'
+                ], answer: 'B' },
+            { id: 19,
+                text: '张同学在生源地助学贷款QQ群里接到一个自称银行工作人员的语音电话，对方说他贷款用的银行卡有限制，导致贷款失败，需要通过屏幕共享帮助张同学解除限制。这时张同学不应该做的是（）',
+                options: ['A.相信对方，按指示打开屏幕共享', 'B.保持冷静，拒绝一切屏幕共享、远程操控要求',
+                    'C.联系官方工作人员和学校核实情况', 'D.意识到是诈骗，立刻挂断电话'], answer: 'A' },
+            { id: 20,
+                text: '小王在二手交易平台发布端游账号的出售信息，一买家发来附上二维码的已下单截图，声称担心小王在交易中途追回账号，要求小张扫描二维码联系平台客服缴纳500元担保金，等交易完成后会全额退还。以下应对方式正确的是（）',
+                options: ['A.担心交易失败，按照截图提示的链接缴纳担保金', 'B.联系官方平台客服，核实真伪',
+                    'C.与买家协商，让买家承担一半担保金', 'D.认为担保金金额不高，先缴纳再等待退还'
+                ], answer: 'B' },
+            { id: 21,
+                text: '黄同学在"双十一"期间收到一条短信称:"您好，由于您购物信誉良好，邀请您参与店铺好评返现活动，每单返利10-50元，加QQ领取任务。"黄同学添加客服后，按照要求先做了一单100元的任务，很快收到了本金加佣金共120元。黄同学放下戒备支付200元再做一单后，客服说现在有一个"高收益连单任务"，需要连续完成三单（金额分别为200元、500元、800元），完成后一次性返还本金并奖励30%的高额佣金。黄同学感到不对劲，但对方威胁说"如果不继续充值，之前的200元就无法退回"。黄同学应该怎么做（）',
+                options: ['A.为了拿回200元，只能继续做任务', 'B.不再转账，立即保存聊天记录和转账截图，向公安部门报案',
+                    'C.继续联系客服协商，争取退回200元', 'D.继续充值，同时做好转账记录，方便以后维权'
+                ], answer: 'B' },
+            { id: 22,
+                text: '你接到自称快递员的来电，对方准确说出了你的身份信息和家庭地址，称把你的快递弄丢了，要全额退款，发送退款链接让你填写银行卡信息，称填完后退款将直接退到银行卡，此时你应该（）',
+                options: ['A.点击链接，按要求输入银行卡、退款验证码', 'B.半信半疑，先与其交涉具体信息',
+                    'C.挂断电话，直接与商家核对物流信息', 'D.由于商品已回归原价，与快递员协商还需要赔偿中间的差价'
+                ], answer: 'C' },
+            { id: 23,
+                text: '小杨收到高中好友的微信，称自己银行卡限额急需用钱，请求小杨帮他将一笔钱汇到某个账户上，并发来已将这笔钱转到小杨银行卡中的截图，此时小杨该怎么做（）',
+                options: ['A.患难见真情，只要收到汇款凭证，就帮帮朋友吧', 'B.事态紧急来不及向好友确认，先汇钱过去帮忙',
+                    'C.朋友已经给了支付凭证了，应该不会是骗子，先江湖救急',
+                    'D.转账截图可随意伪造，切勿轻信图片凭证，务必通过视频通话、电话等当面核验身份，确认属实后再处理'
+                ], answer: 'D' },
+            { id: 24,
+                text: '小安在交友APP上认识了网友"婉儿"。添加好友后不久，"婉儿"主动提出打开摄像头，双方"坦诚相待"，小安未加思索便同意裸聊。随后，"婉儿"快速截取小安的照片并要求他转款，否则把裸聊视频传播给小安的亲朋好友。小安应该怎么做（）',
+                options: ['A.在极度恐慌中，将款项汇入对方账户', 'B.碍于面子问题，不向家长、老师寻求帮助，和对方协商转账数额',
+                    'C.商量可否先付一笔再想其他办法', 'D.第一时间将实情告知辅导员和民警，听从专业指导'
+                ], answer: 'D' },
+            { id: 25,
+                text: '小程放假回家，提前买好了机票，临出发还有几天时，他收到自称是"XX航空公司客服"的电话。对方准确报出了他的姓名、航班号和起飞时间，并称该航班因"机械故障"延误，要求他办理改签或退票，并会赔偿300元作为补偿。他应该怎么做（）',
+                options: ['A.立刻根据客服指引办理改签，避免耽误行程', 'B.根据指引填写银行卡等信息以便获得补偿',
+                    'C.向此客服询问具体情况', 'D.通过官方App或航空公司官网公布的客服电话进行核实'
+                ], answer: 'D' },
+            { id: 26,
+                text: '小王在寝室翻看网络短视频，突然看见可以"同城交友，线下面见"的广告，小王动了心思。添加对方为微信好友后。对方给小王发了一个链接，小王下载APP联系客服，客服提出需要完成几次任务才能进行交友。小王接下来应该（）',
+                options: ['A.先做一次任务试一试', 'B.马上停止操作，不进行任何转账', 'C.立刻转账，交友优先。',
+                'D.按照要求，把任务都完成'], answer: 'B' },
+            { id: 27,
+                text: '吴同学想购买某网游的高级游戏账号。通过游戏内的公告找到一个卖家并谈好价格后，对方为确保可靠的交易，发来一陌生链接，要求吴同学在网站中支付一定的担保金，交易成功后担保金会自动退回。吴同学应该怎么做（）',
+                options: ['A.担保平台应该正规，不会被骗，直接转账', 'B.账号难得，立即按要求操作',
+                    'C.陌生链接不点击，要求对方通过官方渠道交易', 'D.直接加对方微信进行转账'
+                ], answer: 'C' },
+            { id: 28,
+                text: '小安在社交网站看到附近有人出售二手自行车，卖家称平台交易有手续费，如果在微信平台交易，可以便宜一些卖给小安，小安该怎么办（）',
+                options: ['A.私下联系，先付定金，到货付尾款', 'B.脱离平台无保障，坚持平台交易', 'C.机会难得，微信转账',
+                    'D.先和卖家砍价，价格合适就微信付款'
+                ], answer: 'B' },
+            { id: 29,
+                text: '游戏类诈骗涵盖账号交易、皮肤道具充值、代练、游戏租号、破解防沉迷、游戏理赔、虚假礼包兑换等类型。下列行为中，极易受骗的行为是（）',
+                options: ['A.在官方游戏商城、正规交易平台内完成道具购买与账号交易', 'B.私下添加游戏好友，脱离正规渠道转账交易',
+                    'C.拒绝陌生人大额返利、低价绝版道具、免费代练等诱惑', 'D.遇到游戏异常问题，通过官网官方渠道咨询核实'
+                ], answer: 'B' },
+            { id: 30,
+                text: '大学生小亮在浏览网页时弹出一则"同城速约，扫码下载"的广告。出于好奇，他扫描二维码下载了一款APP。注册后，客服热情接待，称只需小额转账，完成几单"助力任务"，即可免费安排线下见面，并承诺任务本金全返且有20%返利。小亮此时应该怎么做（）',
+                options: ['A.这是难得的"财色双收"机会，立即按照客服要求开始做任务',
+                    'B.先做金额最小的试试，如果返钱就说明是真的，可以继续', 'C.是诈骗，立即停止操作，删除APP，并向相关部门反映',
+                    'D.邀请室友一起参与，多一个人多一份保障，还能赚返利'
+                ], answer: 'C' },
+        ];
+
+        // 多选题：{id, text, options:[...], answer:['A','B',...]}  (正确答案的字母数组)
+        const multiQuestions = [
+            { id: 31,
+                text: '郑同学很想参加自己喜欢的明星演唱会，但在官网未成功抢购到门票，她看到微博上有人称有事无法参加，想要转卖门票。下列做法正确的是（）',
+                options: ['A.核对官网上此次演唱会是否实名制购票，是否可以转让门票，提高收票警惕',
+                    'B.通过正规平台交易，绝不私下交易', 'C.不下载非官方软件或进入不明平台',
+                'D.一旦遇到押金或提前付款要求，立即停止交易'], answer: ['A', 'B', 'C', 'D'] },
+            { id: 32,
+                text: '小郭在兼职微信群看到一则为网店"刷好评得返现"的广告，宣称"动动手指、日赚百元""无需任何押金"。小郭添加客服后，被拉进一个任务群，并顺利完成了前几单，每单获利5元。随后，客服引导他下载一款专用的"购物APP"进行"刷大单、赚佣金"的任务。此时，小郭应该怎么做（）',
+                options: ['A.机会难得，立刻投入大量资金进行刷单，争取赚取更多生活费',
+                    'B.欣然接受，并拉上室友一起参与，认为这种"好事"应该分享', 'C.及时终止，前期小额返利是诈骗分子获取信任的惯用伎俩',
+                    'D.果断拒绝，"网络刷单"本身就是违法行为，不贪图小利参与刷单活动'
+                ], answer: ['C', 'D'] },
+            { id: 33,
+                text: '某日，助学贷款群里自称"学生资助中心王老师"的人向小刘发出了好友申请，声称小刘的助学贷款程序出现问题，要求小刘通过扫描二维码、共享屏幕操作银行卡相关信息来恢复贷款的正常流程。下列有关小刘的做法不正确的有（）',
+                options: ['A.相信王老师，按照对方要求进行操作',
+                    'B.挂断电话，教育部门或助学贷款承办银行的工作人员不会通过这种方式联系借款人进行此类操作',
+                    'C.先按照王老师说的操作一部分，看是否能解决问题', 'D.向王老师索要相关证据后进行操作'
+                ], answer: ['A', 'C', 'D'] },
+            { id: 34,
+                text: '节假日期间，小王在网上订购了一张回家的飞机票。后续由于行程改变，小王打算退票。当日上午，她上网搜索了"退机票"，选择了排在前面的一个以"400"开头的退票客服电话。电话拨通后，对方客服表示退票可以，但要付80元的退票手续费。接下来，小王应该怎么做（）',
+                options: ['A.极有可能是诈骗，果断挂断电话，登录订票官方网站联系官方客服',
+                    'B.80元不多，退票要紧，尽快支付', 'C.通过官方平台与航空公司进行联系，咨询退票方法',
+                'D.收退票手续费是应该的，跟随客服指引操作'], answer: ['A', 'C'] },
+            { id: 35,
+                text: '郑同学在社交网站看到兼职广告并私信加群后，群主称"刷单每单赚5元，附返佣截图。"让他下单试试看。郑同学的错误做法有（）',
+                options: ['A.按照群主要求尝试刷单', 'B.刷单属违法行为，一切刷单均是诈骗，立即退群', 'C.先刷小额，收佣后再加大投入',
+                    'D.只刷小额，兼顾佣金与风险'
+                ], answer: ['A', 'C', 'D'] },
+            { id: 36,
+                text: '在冒充公检法的诈骗事件中，骗子往往以受害人身份信息泄露，涉嫌贩毒、走私、洗钱或者信用卡透支消费等理由，要求受害人将银行卡资金转入"安全账户"。下列说法正确的是（）',
+                options: ['A.所有司法机关绝对不会电话办案', 'B.所有司法机关绝对不会设立"安全账户"',
+                    'C.所有司法机关绝对不会打电话要求群众转账', 'D.应按照对方要求到柜员机把钱存入"安全账户"保障资金安全'
+                ], answer: ['A', 'B', 'C'] },
+            { id: 37,
+                text: '以下关于网络招嫖的说法正确的是（）',
+                options: ['A.网络招嫖属违法行为，还存在被诈骗的风险，切莫以身试法',
+                    'B.网络招嫖属于你情我愿的个人行为，只要能满足要求就无需担心',
+                    'C.在网络招嫖诈骗中，不法分子会通过色情信息引诱受害人，随后以刷单完成任务即可获取色情服务为由引导受害人进行网络刷单、充值转账等',
+                    'D.面对网络招嫖信息，只是在网上看看，点击网络链接了解一下，不进行线下见面，就不会有任何风险'
+                ], answer: ['A', 'C'] },
+            { id: 38,
+                text: '以下哪些属于防范电信诈骗"十个凡是"的内容（）',
+                options: ['A.凡是要求你打开屏幕共享，指导你进行资金账户操作的，都是诈骗',
+                    'B.凡是以网络兼职或投资理财等名义，要求通过快递、网约车等方式寄送现金或黄金的，都是诈骗',
+                    'C.凡是自称公检法工作人员，以涉嫌相关违法犯罪为由，要求你将资金打入"安全账户"的，都是诈骗',
+                    'D.凡是要求垫付资金做任务的兼职刷单，都是诈骗'
+                ], answer: ['A', 'B', 'C', 'D'] },
+            { id: 39,
+                text: '下列说法正确的是（）',
+                options: ['A.陌生人谈到银行卡转账，一律挂断', 'B.谈到"公检法"要求汇款保安全的，一律挂断',
+                    'C.谈到突然中大小奖了，一律挂断', 'D.陌生短信让你点击不明链接的，一律删掉'
+                ], answer: ['A', 'B', 'C', 'D'] },
+            { id: 40,
+                text: '96110是国家反诈骗电话专线，该专线的主要功能有（）',
+                options: ['A.劝阻预警极易被骗人员或正在被骗的人员', 'B.防骗咨询', 'C.消费纠纷投诉', 'D.涉诈举报'
+                ], answer: ['A', 'B', 'D'] },
+        ];
+
+        // 填空题：{id, refText: 原文}
+        const fillQuestions = [
+            { id: 1,
+                refText: '网络招嫖与网络刷单均属于违法行为。诈骗分子会以"完成任务即可获取色情服务或高额报酬"为名，要求受害人垫资刷单、充值转账，最终卷款消失。切勿因猎奇或贪利陷入诈骗分子的圈套。'
+            },
+            { id: 2,
+                refText: '在网络诈骗中，诈骗分子常常会诱导受害人下载具有屏幕共享功能的应用，利用屏幕共享功能获取受害人的账户信息、银行卡号、验证码等，从而骗取钱款。'
+            },
+        ];
+
+        // ==================== 渲染题目 ====================
+        function renderJudgeQuestions() {
+            const container = document.getElementById('judgeQuestions');
+            let html = '';
+            judgeQuestions.forEach((q, idx) => {
+                html += `
+                <div class="question-block judge-q">
+                    <div class="q-num">第${idx+1}题（2分）</div>
+                    <div class="q-text">${q.id}．（ ）${q.text}</div>
+                    <div class="options">
+                        <label><input type="radio" name="judge_${q.id}" value="true" required> ✅ 正确</label>
+                        <label><input type="radio" name="judge_${q.id}" value="false"> ❌ 错误</label>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderSingleQuestions() {
+            const container = document.getElementById('singleQuestions');
+            let html = '';
+            singleQuestions.forEach((q, idx) => {
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                html += `
+                <div class="question-block single-q">
+                    <div class="q-num">第${idx+16}题（2分）</div>
+                    <div class="q-text">${q.id}．${q.text}</div>
+                    <div class="options">`;
+                q.options.forEach((opt, oi) => {
+                    html +=
+                        `<label><input type="radio" name="single_${q.id}" value="${optionLabels[oi]}" required> ${opt}</label>`;
+                });
+                html += `</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderMultiQuestions() {
+            const container = document.getElementById('multiQuestions');
+            let html = '';
+            multiQuestions.forEach((q, idx) => {
+                const optionLabels = ['A', 'B', 'C', 'D'];
+                html += `
+                <div class="question-block multi-q">
+                    <div class="q-num">第${idx+31}题（3分）<span style="color:#d93025;font-size:0.8rem;"> [多选题]</span></div>
+                    <div class="q-text">${q.id}．${q.text}</div>
+                    <div class="options">`;
+                q.options.forEach((opt, oi) => {
+                    html +=
+                        `<label><input type="checkbox" name="multi_${q.id}" value="${optionLabels[oi]}"> ${opt}</label>`;
+                });
+                html += `</div></div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderFillQuestions() {
+            const container = document.getElementById('fillQuestions');
+            let html = '';
+            fillQuestions.forEach((q, idx) => {
+                html += `
+                <div class="question-block fill-q">
+                    <div class="q-num">第${idx+1}题（5分）</div>
+                    <div class="fill-ref">
+                        <span class="ref-label">📌 请抄录以下文字：</span>
+                        ${q.refText}
+                    </div>
+                    <textarea name="fill_${q.id}" placeholder="请在此处完整抄录上述文字..." required></textarea>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        // ==================== 评分子系统 ====================
+        function getJudgeScore(answers) {
+            let score = 0;
+            const details = [];
+            judgeQuestions.forEach(q => {
+                const userVal = answers[`judge_${q.id}`];
+                let userAnswer = null;
+                if (userVal === 'true') userAnswer = true;
+                if (userVal === 'false') userAnswer = false;
+                const correct = (userAnswer === q.answer);
+                if (correct) score += 2;
+                details.push({
+                    id: q.id,
+                    type: 'judge',
+                    correct,
+                    userAnswer: userAnswer === true ? '正确' : (userAnswer === false ? '错误' : '未作答'),
+                    correctAnswer: q.answer ? '正确' : '错误',
+                    text: q.text,
+                });
+            });
+            return { score, details };
+        }
+
+        function getSingleScore(answers) {
+            let score = 0;
+            const details = [];
+            singleQuestions.forEach(q => {
+                const userAnswer = answers[`single_${q.id}`] || '未作答';
+                const correct = (userAnswer === q.answer);
+                if (correct) score += 2;
+                details.push({
+                    id: q.id,
+                    type: 'single',
+                    correct,
+                    userAnswer,
+                    correctAnswer: q.answer,
+                    text: q.text,
+                    options: q.options,
+                });
+            });
+            return { score, details };
+        }
+
+        function getMultiScore(answers) {
+            let score = 0;
+            const details = [];
+            multiQuestions.forEach(q => {
+                const raw = answers[`multi_${q.id}`];
+                let userAnswers = [];
+                if (raw) {
+                    if (Array.isArray(raw)) {
+                        userAnswers = raw.sort();
+                    } else {
+                        userAnswers = [raw].sort();
+                    }
+                }
+                const correctAnswers = [...q.answer].sort();
+                const correct = (JSON.stringify(userAnswers) === JSON.stringify(correctAnswers));
+                if (correct) score += 3;
+                details.push({
+                    id: q.id,
+                    type: 'multi',
+                    correct,
+                    userAnswer: userAnswers.join(', ') || '未作答',
+                    correctAnswer: correctAnswers.join(', '),
+                    text: q.text,
+                });
+            });
+            return { score, details };
+        }
+
+        function getFillScore(answers) {
+            let score = 0;
+            const details = [];
+            fillQuestions.forEach(q => {
+                const userText = (answers[`fill_${q.id}`] || '').trim();
+                const refText = q.refText.trim();
+                const similarity = calcSimilarity(userText, refText);
+                let earned = 0;
+                if (similarity >= 0.95) earned = 5;
+                else if (similarity >= 0.80) earned = 3;
+                else earned = 0;
+                score += earned;
+                details.push({
+                    id: q.id,
+                    type: 'fill',
+                    earned,
+                    maxScore: 5,
+                    similarity,
+                    userText,
+                    refText,
+                });
+            });
+            return { score, details };
+        }
+
+        function calcSimilarity(str1, str2) {
+            if (!str1 && !str2) return 1;
+            if (!str1 || !str2) return 0;
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const maxLen = Math.max(len1, len2);
+            if (maxLen === 0) return 1;
+            // 使用简单的动态规划计算编辑距离
+            const dp = [];
+            for (let i = 0; i <= len1; i++) {
+                dp[i] = [i];
+            }
+            for (let j = 0; j <= len2; j++) {
+                dp[0][j] = j;
+            }
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                    dp[i][j] = Math.min(
+                        dp[i - 1][j] + 1,
+                        dp[i][j - 1] + 1,
+                        dp[i - 1][j - 1] + cost
+                    );
+                }
+            }
+            const distance = dp[len1][len2];
+            return 1 - distance / maxLen;
+        }
+
+        // ==================== 提交与评分 ====================
+        function submitQuiz() {
+            // 验证基本信息
+            const identity = document.getElementById('identity').value;
+            const grade = document.getElementById('grade').value;
+            const studentName = document.getElementById('studentName').value.trim();
+            const studentId = document.getElementById('studentId').value.trim();
+            const department = document.getElementById('department').value;
+
+            if (!identity || !grade || !studentName || !studentId || !department) {
+                alert('请完整填写基本信息后再提交！');
+                return;
+            }
+
+            // 收集所有答案
+            const form = document.getElementById('quizForm');
+            const formData = new FormData(form);
+            const answers = {};
+            for (const [key, value] of formData.entries()) {
+                if (key.startsWith('multi_')) {
+                    if (!answers[key]) answers[key] = [];
+                    answers[key].push(value);
+                } else {
+                    answers[key] = value;
+                }
+            }
+
+            // 检查是否有未作答的题目
+            let unanswered = [];
+            judgeQuestions.forEach(q => {
+                if (!answers[`judge_${q.id}`]) unanswered.push(`判断题第${q.id}题`);
+            });
+            singleQuestions.forEach(q => {
+                if (!answers[`single_${q.id}`]) unanswered.push(`单选题第${q.id}题`);
+            });
+            multiQuestions.forEach(q => {
+                if (!answers[`multi_${q.id}`] || answers[`multi_${q.id}`].length === 0)
+                    unanswered.push(`多选题第${q.id}题`);
+            });
+            fillQuestions.forEach(q => {
+                if (!answers[`fill_${q.id}`] || answers[`fill_${q.id}`].trim() === '')
+                    unanswered.push(`填空题第${q.id}题`);
+            });
+
+            if (unanswered.length > 0) {
+                const confirmSubmit = confirm(
+                    `以下题目尚未作答：\n${unanswered.slice(0,8).join('、')}${unanswered.length>8?'...等共'+unanswered.length+'题':''}\n\n未作答的题目将计0分，确定提交吗？`
+                    );
+                if (!confirmSubmit) return;
+            }
+
+            // 评分
+            const judgeResult = getJudgeScore(answers);
+            const singleResult = getSingleScore(answers);
+            const multiResult = getMultiScore(answers);
+            const fillResult = getFillScore(answers);
+
+            const totalScore = judgeResult.score + singleResult.score + multiResult.score + fillResult.score;
+            const maxScore = 100;
+            const allDetails = [
+                ...judgeResult.details,
+                ...singleResult.details,
+                ...multiResult.details,
+                ...fillResult.details,
+            ];
+
+            // 等级评定
+            let gradeText, gradeClass, msgText, msgClass;
+            if (totalScore >= 90) {
+                gradeText = '🏆 优秀';
+                gradeClass = 'excellent';
+                msgText = '恭喜！您的防诈意识非常强，对各类诈骗手段有清晰的认识，请继续保持警惕！';
+                msgClass = 'excellent';
+            } else if (totalScore >= 80) {
+                gradeText = '👍 良好';
+                gradeClass = 'good';
+                msgText = '您的防诈意识较好，但仍有提升空间，建议对薄弱环节加强学习。';
+                msgClass = 'good';
+            } else if (totalScore >= 70) {
+                gradeText = '📖 一般';
+                gradeClass = 'fair';
+                msgText = '您的防诈意识一般，部分诈骗手段可能让您陷入圈套，需要加强防诈知识学习。';
+                msgClass = 'fair';
+            } else if (totalScore >= 60) {
+                gradeText = '⚠️ 及格';
+                gradeClass = 'pass';
+                msgText = '您的防诈意识有待提高，请认真复习防诈知识，提高警惕。';
+                msgClass = 'fair';
+            } else {
+                gradeText = '🚨 不及格';
+                gradeClass = 'fail';
+                msgText = '您的防诈意识较为薄弱，极易成为诈骗分子的目标！请务必重视并系统学习防诈知识，保护好个人财产安全！';
+                msgClass = 'fail';
+            }
+
+            // 显示结果
+            const resultPanel = document.getElementById('resultPanel');
+            resultPanel.classList.add('show');
+            document.getElementById('resultScore').textContent = totalScore + ' / ' + maxScore;
+            document.getElementById('resultScore').className = 'result-score ' + gradeClass;
+            document.getElementById('resultGrade').textContent = gradeText;
+            document.getElementById('resultGrade').className = 'result-grade ' + gradeClass;
+            document.getElementById('resultBreakdown').innerHTML = `
+                <span>📋 判断题：${judgeResult.score}/30</span>
+                <span>📝 单选题：${singleResult.score}/30</span>
+                <span>🔢 多选题：${multiResult.score}/30</span>
+                <span>✍️ 填空题：${fillResult.score}/10</span>
+            `;
+            const msgEl = document.getElementById('resultMsg');
+            msgEl.textContent = msgText;
+            msgEl.className = 'result-msg ' + msgClass;
+
+            // 渲染详细解析
+            const detailSection = document.getElementById('detailSection');
+            let detailHtml = '';
+            allDetails.forEach(d => {
+                if (d.type === 'judge') {
+                    detailHtml += `
+                    <div class="detail-item ${d.correct?'correct':'wrong'}">
+                        <span class="icon-result">${d.correct?'✅':'❌'}</span>
+                        <span class="detail-text">
+                            <strong>判断题第${d.id}题</strong>：${d.text}<br>
+                            您的答案：<span class="${d.correct?'correct-ans':'wrong-ans'}">${d.userAnswer}</span> | 
+                            正确答案：<span class="correct-ans">${d.correctAnswer}</span>
+                        </span>
+                    </div>`;
+                } else if (d.type === 'single') {
+                    detailHtml += `
+                    <div class="detail-item ${d.correct?'correct':'wrong'}">
+                        <span class="icon-result">${d.correct?'✅':'❌'}</span>
+                        <span class="detail-text">
+                            <strong>单选题第${d.id}题</strong>：${d.text}<br>
+                            您的答案：<span class="${d.correct?'correct-ans':'wrong-ans'}">${d.userAnswer}</span> | 
+                            正确答案：<span class="correct-ans">${d.correctAnswer}</span>
+                        </span>
+                    </div>`;
+                } else if (d.type === 'multi') {
+                    detailHtml += `
+                    <div class="detail-item ${d.correct?'correct':'wrong'}">
+                        <span class="icon-result">${d.correct?'✅':'❌'}</span>
+                        <span class="detail-text">
+                            <strong>多选题第${d.id}题</strong>：${d.text}<br>
+                            您的答案：<span class="${d.correct?'correct-ans':'wrong-ans'}">${d.userAnswer||'未作答'}</span> | 
+                            正确答案：<span class="correct-ans">${d.correctAnswer}</span>
+                            ${!d.correct?'<br><small style="color:#888;">（少选、多选、错选均不得分）</small>':''}
+                        </span>
+                    </div>`;
+                } else if (d.type === 'fill') {
+                    const simPercent = Math.round(d.similarity * 100);
+                    detailHtml += `
+                    <div class="detail-item ${d.earned>=5?'correct':(d.earned>0?'correct':'wrong')}">
+                        <span class="icon-result">${d.earned>=5?'✅':(d.earned>0?'⚠️':'❌')}</span>
+                        <span class="detail-text">
+                            <strong>填空题第${d.id}题</strong>：得分 ${d.earned}/5（相似度：${simPercent}%）<br>
+                            ${d.earned<5?`<span style="color:#d93025;">您的抄写与原文存在差异，请仔细核对。</span>`:'抄写完全正确！'}
+                        </span>
+                    </div>`;
+                }
+            });
+            detailSection.innerHTML = detailHtml;
+            document.getElementById('detailSection').classList.remove('open');
+
+            // 滚动到结果面板
+            resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // 禁用表单修改
+            disableForm();
+        }
+
+        function toggleDetail() {
+            const detailSection = document.getElementById('detailSection');
+            const toggleBtn = document.getElementById('detailToggle');
+            if (detailSection.classList.contains('open')) {
+                detailSection.classList.remove('open');
+                toggleBtn.textContent = '📋 查看详细答题解析 ▼';
+            } else {
+                detailSection.classList.add('open');
+                toggleBtn.textContent = '📋 收起详细答题解析 ▲';
+                detailSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function disableForm() {
+            const form = document.getElementById('quizForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(el => el.disabled = true);
+            const submitBtn = form.querySelector('.btn-submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '✅ 已提交';
+                submitBtn.style.opacity = '0.6';
+                submitBtn.style.cursor = 'not-allowed';
+                submitBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        // ==================== 初始化 ====================
+        function init() {
+            renderJudgeQuestions();
+            renderSingleQuestions();
+            renderMultiQuestions();
+            renderFillQuestions();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        // 滚动监听：回到顶部按钮
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.scroll-top');
+            if (window.scrollY > 400) {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.pointerEvents = 'none';
+            }
+        });
+        // 初始状态
+        document.querySelector('.scroll-top').style.opacity = '0';
+        document.querySelector('.scroll-top').style.pointerEvents = 'none';
+    </script>
+</body>
+</html>
